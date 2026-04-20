@@ -1,0 +1,9 @@
+{
+  "name": "sabel-engagement-qualifier",
+  "version": "1.0.0",
+  "description": "Sabel internal AE-facing qualifier for full engagement scoping across the four service pillars (Transformation Blueprint, Intercom Foundations, Automation Engine, Fin Enablement). Captures signal questions, auto-recommends pillars, estimates hours and cost, persists to Upstash, emails summary via Resend.",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  }
+}

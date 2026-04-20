@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sabel Engagement Qualifier · Full Offering</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --black:#0B0B0C;
+    --card:#161618;
+    --card-hover:#1D1D20;
+    --red:#E10600;
+    --red-dim:rgba(225,6,0,0.35);
+    --white:#FFFFFF;
+    --body:#E2E8F0;
+    --muted:#94A3B8;
+    --border:#2A3547;
+    --mono:#64748B;
+    --green:#22C55E;
+    --amber:#F59E0B;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--black);color:var(--body);font-family:'Inter',sans-serif;min-height:100vh;font-size:14px;line-height:1.55}
+
+  body::before{
+    content:"";position:fixed;top:0;bottom:0;left:50%;width:1px;
+    background:var(--red);opacity:0.22;pointer-events:none;z-index:0;
+  }
+
+  .page{max-width:960px;margin:0 auto;padding:40px 32px 120px;position:relative;z-index:1}
+
+  /* Header */
+  header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:48px;padding-bottom:24px;border-bottom:1px solid var(--border)}
+  .brand{display:flex;flex-direction:column;gap:8px}
+  .logo-svg{height:36px;width:auto;display:block}
+  .tagline{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--mono);letter-spacing:0.15em;text-transform:uppercase}
+  .doc-type{text-align:right}
+  .doc-type .label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--red);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:4px}
+  .doc-type .title{font-size:18px;font-weight:600;color:var(--white)}
+
+  /* Intro */
+  .intro{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--red);padding:20px 24px;margin-bottom:40px;border-radius:4px}
+  .intro h1{font-size:24px;color:var(--white);font-weight:700;margin-bottom:8px;letter-spacing:-0.01em}
+  .intro p{color:var(--body);font-size:14px}
+  .intro p + p{margin-top:8px}
+
+  /* Sticky verdict */
+  .verdict{position:sticky;top:16px;z-index:10;background:var(--card);border:1px solid var(--border);border-radius:6px;padding:16px 20px;margin-bottom:32px;display:flex;align-items:stretch;justify-content:space-between;gap:16px;transition:all .25s ease}
+  .verdict.active{border-color:var(--red);box-shadow:0 0 0 1px var(--red)}
+  .verdict-left{display:flex;flex-direction:column;gap:10px;flex:1;min-width:0}
+  .verdict-headline{font-size:13px;color:var(--body);min-width:0}
+  .verdict-headline strong{color:var(--white);display:block;margin-bottom:4px;font-size:14px}
+  .verdict-headline .reasons{font-size:12px;color:var(--muted);display:block;line-height:1.5}
+  .pillar-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+  .pillar-tag{padding:4px 10px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;background:var(--red);color:var(--white)}
+  .pillar-tag.pending{background:var(--border);color:var(--muted)}
+
+  .verdict-right{text-align:right;padding-left:16px;border-left:1px solid var(--border);flex-shrink:0;display:flex;flex-direction:column;justify-content:center}
+  .est-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:4px}
+  .est-hours{font-size:20px;font-weight:700;color:var(--white);line-height:1.15}
+  .est-hours .unit{font-size:12px;font-weight:500;color:var(--muted);margin-left:3px}
+  .est-cost{font-size:14px;font-weight:600;color:var(--body);font-family:'JetBrains Mono',monospace;margin-top:2px}
+
+  /* Sections */
+  section.group{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--red);border-radius:4px;padding:28px 32px;margin-bottom:24px}
+  section.group h2{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--red);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:4px;font-weight:700}
+  section.group h2 + .section-title{font-size:18px;font-weight:600;color:var(--white);margin-bottom:6px;letter-spacing:-0.01em}
+  section.group .section-desc{color:var(--muted);font-size:13px;margin-bottom:20px;line-height:1.5}
+
+  /* Fields */
+  .field{margin-bottom:20px}
+  .field:last-child{margin-bottom:0}
+  label{display:block;font-size:13px;color:var(--white);font-weight:500;margin-bottom:8px}
+  label .req{color:var(--red);margin-left:4px}
+  label .hint{display:block;font-size:12px;color:var(--muted);font-weight:400;margin-top:2px}
+
+  input[type=text],input[type=email],input[type=number],select,textarea{
+    width:100%;background:var(--black);border:1px solid var(--border);color:var(--white);
+    padding:10px 12px;font-family:'Inter',sans-serif;font-size:14px;border-radius:4px;
+    transition:border-color .15s ease;
+  }
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--red)}
+  textarea{resize:vertical;min-height:80px}
+
+  /* Inline pill input */
+  .inline-input{
+    width:14ch;max-width:100%;padding:8px 14px;background:var(--black);
+    border:1px solid var(--border);border-radius:4px;color:var(--body);
+    font-family:'Inter',sans-serif;font-size:13px;font-weight:400;
+    transition:border-color .15s ease;
+  }
+  .inline-input:hover{border-color:var(--muted);color:var(--white)}
+  .inline-input:focus{outline:none;border-color:var(--red);color:var(--white)}
+  .inline-input::-webkit-outer-spin-button,
+  .inline-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+  .inline-input[type=number]{-moz-appearance:textfield}
+
+  /* Radio groups */
+  .radio-group{display:flex;flex-wrap:wrap;gap:8px}
+  .radio-group label{
+    display:inline-flex;align-items:center;padding:8px 14px;background:var(--black);
+    border:1px solid var(--border);border-radius:4px;cursor:pointer;margin-bottom:0;
+    font-size:13px;color:var(--body);transition:all .15s ease;user-select:none;font-weight:400;
+  }
+  .radio-group label:hover{border-color:var(--muted);color:var(--white)}
+  .radio-group label:has(input[type=radio]:checked){background:var(--red);border-color:var(--red);color:var(--white);font-weight:500}
+  .radio-group input[type=radio]{position:absolute;opacity:0;pointer-events:none;width:0;height:0}
+
+  /* Migration callout */
+  .migration-callout{margin-top:10px;padding:14px 18px;background:rgba(225,6,0,0.08);border:1px solid var(--red);border-radius:4px;font-size:13px;color:var(--body);display:none}
+  .migration-callout.visible{display:block}
+  .migration-callout strong{color:var(--white);display:block;margin-bottom:4px}
+  .migration-callout a{color:var(--red);text-decoration:none;font-weight:600}
+  .migration-callout a:hover{text-decoration:underline}
+
+  /* Submit bar */
+  .caveat-note{margin-top:32px;padding:14px 18px;background:var(--card);border:1px solid var(--border);border-left:3px solid var(--red);border-radius:4px;font-size:12px;color:var(--muted);line-height:1.5}
+  .caveat-note a{color:var(--red);text-decoration:none;font-weight:600}
+  .caveat-note a:hover{text-decoration:underline}
+  .submit-bar{margin-top:20px;display:flex;justify-content:flex-end;gap:12px;align-items:center}
+  button{
+    background:var(--red);color:var(--white);border:none;padding:12px 28px;
+    font-family:'Inter',sans-serif;font-size:14px;font-weight:600;border-radius:4px;
+    cursor:pointer;transition:background .15s ease;letter-spacing:0.02em;
+  }
+  button:hover{background:#FF1A0D}
+  button:disabled{background:var(--border);cursor:not-allowed;color:var(--muted)}
+  .submit-status{font-size:13px;color:var(--muted)}
+  .submit-status.success{color:var(--green)}
+  .submit-status.error{color:var(--red)}
+
+  footer{margin-top:48px;padding-top:24px;border-top:1px solid var(--border);text-align:center;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--mono);letter-spacing:0.15em;text-transform:uppercase}
+
+  /* Success screen */
+  .success-screen{display:none;text-align:center;padding:80px 20px}
+  .success-screen.visible{display:block}
+  .success-screen .icon{font-size:48px;color:var(--green);margin-bottom:16px}
+  .success-screen h2{color:var(--white);font-size:24px;margin-bottom:12px}
+  .success-screen p{color:var(--body);margin-bottom:8px}
+  .success-screen .ref{font-family:'JetBrains Mono',monospace;color:var(--muted);font-size:12px;margin-top:16px}
+
+  @media (max-width:640px){
+    .page{padding:24px 16px 80px}
+    header{flex-direction:column;gap:16px;align-items:flex-start}
+    .doc-type{text-align:left}
+    section.group{padding:20px}
+    .verdict{flex-direction:column;align-items:flex-start;gap:12px}
+    .verdict-right{padding-left:0;border-left:none;border-top:1px solid var(--border);padding-top:12px;width:100%;text-align:left}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <div class="brand">
+    <svg class="logo-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 315 105" aria-label="Sabel">
+      <g fill="#FFFFFF">
+        <path d="M28.99,66.25c-2.91,0-5.54-.5-7.82-1.5-4.35-1.9-6.82-5.54-7.34-10.81-.02-.21.05-.41.19-.57.14-.16.33-.24.54-.24h7.13c.07,1.21.37,2.78.93,3.73.58,1.01,1.43,1.81,2.52,2.37,1.08.56,2.38.84,3.85.84,1.23,0,2.34-.2,3.28-.6.95-.41,1.71-1,2.24-1.78.53-.78.8-1.71.8-2.76s-.27-2-.8-2.82c-.52-.81-1.28-1.51-2.24-2.09-.94-.57-2.05-1.11-3.31-1.59-1.25-.49-2.61-.95-4.05-1.38-3.45-1.03-6.06-2.45-7.75-4.2-1.68-1.73-2.53-4.06-2.53-6.9,0-2.39.59-4.47,1.74-6.17,1.16-1.71,2.78-3.03,4.83-3.94,2.06-.92,4.44-1.38,7.08-1.38s5.14.47,7.2,1.41c2.05.93,3.69,2.29,4.86,4.03,1,1.48,1.61,3.21,1.81,5.13.02.2-.04.4-.18.55-.14.16-.34.25-.55.25h-7.24c-.04-.85-.3-1.66-.76-2.42-.51-.83-1.21-1.51-2.1-2.01-.89-.51-1.95-.76-3.16-.76-.09,0-.2,0-.3,0-.92,0-1.78.17-2.54.49-.85.37-1.55.91-2.06,1.63-.51.72-.77,1.62-.77,2.68s.25,1.89.74,2.59c.49.69,1.19,1.28,2.1,1.77.88.47,1.91.92,3.07,1.33,1.15.41,2.4.85,3.77,1.31,2.05.66,3.93,1.47,5.59,2.41,1.65.93,2.99,2.16,3.97,3.66.98,1.49,1.48,3.48,1.48,5.91,0,2.09-.55,4.05-1.63,5.83-1.08,1.78-2.69,3.25-4.78,4.35-2.1,1.11-4.73,1.67-7.83,1.67Z"/>
+        <path d="M83.19,65.68c-.27,0-.51-.17-.6-.43l-2.97-8.62h-15.78l-2.98,8.62c-.09.25-.33.42-.6.42h-7.12c-.21,0-.4-.1-.52-.27-.12-.17-.15-.38-.08-.58l14.35-39.38c.09-.25.33-.41.59-.41h8.65c.26,0,.5.17.59.42l14.29,39.38c.07.2.04.41-.08.58s-.31.27-.52.27h-7.24ZM66,50.42h11.5l-5.73-16.67-5.76,16.67Z"/>
+        <path d="M103.21,65.68c-.35,0-.63-.28-.63-.63V25.67c0-.35.28-.63.63-.63h16.58c2.78,0,5.16.45,7.1,1.33,1.92.88,3.4,2.1,4.39,3.64.99,1.53,1.49,3.35,1.49,5.42s-.43,3.68-1.28,5.04c-.85,1.37-2.01,2.43-3.46,3.17l-1.22.63c-.19.1-.3.3-.28.51.02.21.16.38.36.45.8.25,1.55.6,2.23,1.04,1.41.92,2.54,2.13,3.35,3.59.82,1.46,1.23,3.09,1.23,4.85,0,2.18-.52,4.11-1.55,5.75-1.03,1.63-2.54,2.93-4.51,3.85-1.97.92-4.42,1.39-7.27,1.39h-17.16ZM110.73,59.17h8.23c2.05,0,3.66-.48,4.8-1.44,1.15-.96,1.73-2.34,1.73-4.09s-.6-3.22-1.79-4.24c-1.11-.95-3.11-1.52-5.35-1.52h-3.24s-.08-.04-.08-.08v-5.71s.04-.08.08-.08h2.66c2.21,0,4.12-.52,5.12-1.38,1.07-.93,1.61-2.24,1.61-3.91s-.54-2.99-1.61-3.92c-1.06-.92-2.64-1.38-4.68-1.38h-7.47v27.74Z"/>
+        <path d="M147.37,65.68c-.35,0-.63-.28-.63-.63V25.67c0-.35.28-.63.63-.63h26.18c.35,0,.63.28.63.63v5.82h-19.28v10.41h17.52v6.21h-17.52v11.12h19.28v5.82c0,.35-.28.63-.63.63h-26.18Z"/>
+        <path d="M189.61,65.68c-.35,0-.63-.28-.63-.63V25.67c0-.35.28-.63.63-.63h7.52v34.43h18.77v5.59c0,.35-.28.63-.63.63h-25.66Z"/>
+        <circle cx="261.72" cy="32.47" r="7.19"/>
+        <path d="M255.01,37.59h0c2.48,0,4.49,2.01,4.49,4.49v21.83c0,.1-.08.19-.19.19h-6.29c-1.38,0-2.51-1.12-2.51-2.51v-19.51c0-2.48,2.01-4.49,4.49-4.49Z" transform="translate(38.74 195.21) rotate(-45)"/>
+        <path d="M275.61,29.85h0c2.48,0,4.49,2.01,4.49,4.49v20.75c0,.1-.08.19-.19.19h-8.61c-.1,0-.19-.08-.19-.19v-20.75c0-2.48,2.01-4.49,4.49-4.49Z" transform="translate(110.82 -182.42) rotate(45)"/>
+      </g>
+      <path fill="#C70204" d="M288.29,19.98c4.55,0,8.24,3.7,8.24,8.24v31.1c0,4.55-3.7,8.24-8.24,8.24h-21.32l-1.32,1.33-15.83,15.97c-.09.09-.21.14-.34.14-.25,0-.46-.2-.47-.46v-16.98h-7.07c-4.55,0-8.24-3.7-8.24-8.24v-31.1c0-4.55,3.7-8.24,8.24-8.24h46.35M288.29,15.49h-46.35c-7.03,0-12.73,5.7-12.73,12.73v31.1c0,7.03,5.7,12.73,12.73,12.73h2.58v12.53c.03,2.72,2.24,4.91,4.96,4.91,1.32,0,2.59-.53,3.52-1.47l15.83-15.97h19.45c7.03,0,12.73-5.7,12.73-12.73v-31.1c0-7.03-5.7-12.73-12.73-12.73h0Z"/>
+    </svg>
+    <div class="tagline">Perfect Made Possible</div>
+  </div>
+  <div class="doc-type">
+    <div class="label">Internal · Intercom AE Use</div>
+    <div class="title">Sabel Engagement Qualifier</div>
+  </div>
+</header>
+
+<div class="intro">
+  <h1>Qualify a Sabel engagement opportunity</h1>
+  <p>Signal questions for the four Sabel pillars: Transformation Blueprint, Intercom Foundations, Automation Engine, and Fin Enablement. The form recommends which pillars are in scope and estimates hours and cost as you go.</p>
+  <p>Takes about 3 minutes. Migration deals should go through the dedicated Migr8Now qualifier.</p>
+</div>
+
+<!-- Sticky verdict -->
+<div class="verdict" id="verdict">
+  <div class="verdict-left">
+    <div class="verdict-headline">
+      <strong id="verdictHeadline">Fill the form to see the recommended pillars</strong>
+      <span class="reasons" id="verdictReasons">Recommendations update as you answer each question.</span>
+    </div>
+    <div class="pillar-tags" id="pillarTags">
+      <span class="pillar-tag pending">Awaiting input</span>
+    </div>
+  </div>
+  <div class="verdict-right" id="verdictEstimate" style="display:none">
+    <div class="est-label">Estimate<span style="color:var(--red)">*</span></div>
+    <div class="est-hours" id="estHours">—</div>
+    <div class="est-cost" id="estCost">—</div>
+  </div>
+</div>
+
+<!-- FORM -->
+<form id="qualifierForm" novalidate>
+
+  <!-- Section 1: About the deal -->
+  <section class="group">
+    <h2>Section 01</h2>
+    <div class="section-title">About the deal</div>
+
+    <div class="field">
+      <label>Company / prospect name <span class="req">*</span></label>
+      <input type="text" name="company" required>
+    </div>
+
+    <div class="field">
+      <label>AE name <span class="req">*</span></label>
+      <input type="text" name="ae_name" required>
+    </div>
+
+    <div class="field">
+      <label>AE email
+        <span class="hint">Optional. If provided, a copy of the recommendation will be emailed to you.</span>
+      </label>
+      <input type="email" name="ae_email">
+    </div>
+  </section>
+
+  <!-- Section 2: Customer context -->
+  <section class="group">
+    <h2>Section 02</h2>
+    <div class="section-title">Customer context</div>
+    <p class="section-desc">A quick read of where the customer is starting from. Feeds every pillar recommendation.</p>
+
+    <div class="field">
+      <label>Team size <span class="req">*</span></label>
+      <div class="radio-group" data-name="team_size">
+        <label><input type="radio" name="team_size" value="<10">&lt;10 agents</label>
+        <label><input type="radio" name="team_size" value="10-50">10–50 agents</label>
+        <label><input type="radio" name="team_size" value="50+">50+ agents</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Current state <span class="req">*</span></label>
+      <div class="radio-group" data-name="current_state">
+        <label><input type="radio" name="current_state" value="Intercom already">On Intercom already</label>
+        <label><input type="radio" name="current_state" value="Another platform">On another platform</label>
+        <label><input type="radio" name="current_state" value="Greenfield">Greenfield (no current CX tool)</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Multi-brand or multi-region? <span class="req">*</span>
+        <span class="hint">Multi-brand = distinct customer-facing brands under one roof. Multi-region = multiple geographic markets with their own support teams.</span>
+      </label>
+      <div class="radio-group" data-name="multi_brand">
+        <label><input type="radio" name="multi_brand" value="No">No — single brand / region</label>
+        <label><input type="radio" name="multi_brand" value="Yes">Yes — multi-brand or multi-region</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Primary goal
+        <span class="hint">Optional. One line on what the customer is trying to achieve. Helps frame the discovery call.</span>
+      </label>
+      <textarea name="primary_goal" placeholder="e.g. Launch Fin across three brands in Q3, reduce inbound email volume by 40%..."></textarea>
+    </div>
+  </section>
+
+  <!-- Section 3: Transformation Blueprint signals -->
+  <section class="group">
+    <h2>Section 03</h2>
+    <div class="section-title">Transformation signals</div>
+    <p class="section-desc">Do they need the strategic layer — operating model, governance, KPIs — before the build?</p>
+
+    <div class="field">
+      <label>Does the customer have a clear AI strategy and operating model already? <span class="req">*</span></label>
+      <div class="radio-group" data-name="has_ai_strategy">
+        <label><input type="radio" name="has_ai_strategy" value="Yes">Yes — defined</label>
+        <label><input type="radio" name="has_ai_strategy" value="Partial">Partial / in progress</label>
+        <label><input type="radio" name="has_ai_strategy" value="No">No — starting from scratch</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Are KPIs and governance defined for AI support? <span class="req">*</span>
+        <span class="hint">Targets for automation rate, CSAT, containment, escalation logic, QA rhythm.</span>
+      </label>
+      <div class="radio-group" data-name="kpis_defined">
+        <label><input type="radio" name="kpis_defined" value="Yes">Yes</label>
+        <label><input type="radio" name="kpis_defined" value="No">No</label>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Intercom Foundations signals -->
+  <section class="group">
+    <h2>Section 04</h2>
+    <div class="section-title">Foundations signals</div>
+    <p class="section-desc">Is the Intercom workspace set up in a way that can support automation?</p>
+
+    <div class="field">
+      <label>How is the Intercom workspace configured today? <span class="req">*</span></label>
+      <div class="radio-group" data-name="workspace_state">
+        <label><input type="radio" name="workspace_state" value="Well configured">Well configured</label>
+        <label><input type="radio" name="workspace_state" value="Basic">Basic / partial</label>
+        <label><input type="radio" name="workspace_state" value="Not yet">Not yet set up</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>How many team inboxes / queues needed? <span class="req">*</span></label>
+      <div class="radio-group" data-name="inbox_count">
+        <label><input type="radio" name="inbox_count" value="1-2">1–2</label>
+        <label><input type="radio" name="inbox_count" value="3-5">3–5</label>
+        <label><input type="radio" name="inbox_count" value="6+">6 or more</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Custom workflows needed (routing, assignment, tagging logic)? <span class="req">*</span></label>
+      <div class="radio-group" data-name="workflows_needed">
+        <label><input type="radio" name="workflows_needed" value="None">None — defaults are fine</label>
+        <label><input type="radio" name="workflows_needed" value="Basic">Basic (1–3 workflows)</label>
+        <label><input type="radio" name="workflows_needed" value="Complex">Complex (4+ workflows)</label>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: Automation Engine signals -->
+  <section class="group">
+    <h2>Section 05</h2>
+    <div class="section-title">Automation signals</div>
+    <p class="section-desc">Do they need Fin to do more than answer questions — integrations, procedures, Fin Tasks?</p>
+
+    <div class="field">
+      <label>Integrations or data connectors needed? <span class="req">*</span>
+        <span class="hint">Connecting Fin to back-office systems, CRMs, order management, etc.</span>
+      </label>
+      <div class="radio-group" data-name="integrations_needed">
+        <label><input type="radio" name="integrations_needed" value="0">None</label>
+        <label><input type="radio" name="integrations_needed" value="1-2">1–2</label>
+        <label><input type="radio" name="integrations_needed" value="3+">3 or more</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Are Fin Procedures or Fin Tasks in scope? <span class="req">*</span>
+        <span class="hint">Multi-step resolutions, transactional flows, "do the thing" rather than "tell the customer how".</span>
+      </label>
+      <div class="radio-group" data-name="procedures_needed">
+        <label><input type="radio" name="procedures_needed" value="No">No</label>
+        <label><input type="radio" name="procedures_needed" value="Few">Yes — a few (1–3)</label>
+        <label><input type="radio" name="procedures_needed" value="Many">Yes — several (4+)</label>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 6: Fin Enablement signals -->
+  <section class="group">
+    <h2>Section 06</h2>
+    <div class="section-title">Fin Enablement signals</div>
+    <p class="section-desc">Fin, Copilot, knowledge readiness, QA rhythm.</p>
+
+    <div class="field">
+      <label>Current Fin maturity <span class="req">*</span></label>
+      <div class="radio-group" data-name="fin_maturity">
+        <label><input type="radio" name="fin_maturity" value="None">Not using Fin</label>
+        <label><input type="radio" name="fin_maturity" value="Basic">Using Fin, basic setup</label>
+        <label><input type="radio" name="fin_maturity" value="Tuned">Fin tuned and performing well</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Help Centre article count (current or target) <span class="req">*</span></label>
+      <div class="radio-group" data-name="article_count">
+        <label><input type="radio" name="article_count" value="<50">&lt;50</label>
+        <label><input type="radio" name="article_count" value="50-200">50–200</label>
+        <label><input type="radio" name="article_count" value="200+">200+</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Language coverage needed <span class="req">*</span></label>
+      <div class="radio-group" data-name="languages">
+        <label><input type="radio" name="languages" value="1">English only</label>
+        <label><input type="radio" name="languages" value="2-3">2–3 languages</label>
+        <label><input type="radio" name="languages" value="4+">4 or more languages</label>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 7: Migration flag -->
+  <section class="group">
+    <h2>Section 07</h2>
+    <div class="section-title">Migration</div>
+    <p class="section-desc">Is data migration into Intercom part of this deal?</p>
+
+    <div class="field">
+      <label>Migration in scope? <span class="req">*</span></label>
+      <div class="radio-group" data-name="migration_in_scope">
+        <label><input type="radio" name="migration_in_scope" value="No">No</label>
+        <label><input type="radio" name="migration_in_scope" value="Yes">Yes</label>
+      </div>
+      <div class="migration-callout" id="migrationCallout">
+        <strong>Migration scoping lives in the Migr8Now qualifier</strong>
+        For ticket, contact, or company migration scoping please use the dedicated Migr8Now qualifier. This qualifier covers the four Sabel service pillars; migration is priced and scoped separately.<br><br>
+        <a href="https://sabel-intercom.github.io/migr8now-qualifier/" target="_blank" rel="noopener">→ Open the Migr8Now qualifier</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="caveat-note">
+    <span style="color:var(--red)">*</span> Estimated hours and cost are based on the information provided above and are subject to change with further discovery. Final scope, hours, and pricing are confirmed in a formal proposal following a scoping call.
+    <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);color:var(--body)">
+      To book a time with Sabel and the customer for further discovery, please use the following link: <a href="https://book.sabelcustomersuccess.com/bookmeeting" target="_blank" rel="noopener">book.sabelcustomersuccess.com/bookmeeting</a>
+    </div>
+  </div>
+
+  <div class="submit-bar">
+    <div class="submit-status" id="submitStatus"></div>
+    <button type="submit" id="submitBtn">Submit qualifier</button>
+  </div>
+
+</form>
+
+<!-- Success screen -->
+<div class="success-screen" id="successScreen">
+  <div class="icon">✓</div>
+  <h2>Qualifier submitted</h2>
+  <p id="successVerdict"></p>
+  <p>A copy has been emailed to <strong>richard@sabelcustomersuccess.com</strong>, <strong>akbur.ghafoor@intercom.io</strong>, and to the AE email if provided.</p>
+  <p class="ref" id="successRef"></p>
+</div>
+
+<footer>
+  Perfect Made Possible · sabelcustomersuccess.com
+</footer>
+
+</div>
+
+<script>
+  // ---------- Config ----------
+  const API_ENDPOINT = 'https://sabel-qualifier.vercel.app/api/submit';
+
+  // ---------- Pillar recommendation + pricing logic ----------
+  // Internal rate: USD $200/hr (never disclosed to client). Estimate values are
+  // informational for the AE conversation and subject to discovery confirmation.
+  const HOURLY_RATE = 200;
+
+  function recommendPillars(d){
+    const recs = {
+      blueprint: { active: false, hours: 0, reasons: [] },
+      foundations: { active: false, hours: 0, reasons: [] },
+      automation: { active: false, hours: 0, reasons: [] },
+      fin: { active: false, hours: 0, reasons: [] },
+    };
+
+    // ---- Transformation Blueprint ----
+    // Rare as standalone pillar — most engagements fold strategy work into other pillars.
+    // Only activate when AI strategy work is a real, discrete need.
+    if (d.has_ai_strategy === 'No'){
+      recs.blueprint.active = true;
+      recs.blueprint.hours += 8;
+      recs.blueprint.reasons.push('AI operating model not defined');
+    }
+    if (d.kpis_defined === 'No' && recs.blueprint.active){
+      recs.blueprint.hours += 4;
+      recs.blueprint.reasons.push('KPI framework needed');
+    }
+    if (d.multi_brand === 'Yes' && recs.blueprint.active){
+      recs.blueprint.hours += 3;
+      recs.blueprint.reasons.push('Multi-brand scoping');
+    }
+
+    // ---- Intercom Foundations ----
+    // Baseline: 7 hrs for workspace + roles + base inboxes (Cirqul 7, EP 7 non-inbox).
+    // Multi-brand adds significantly more: Huuuge 4 brands = 20 hrs total Foundations.
+    let foundationsBase = 0;
+    if (d.workspace_state === 'Not yet'){
+      recs.foundations.active = true;
+      foundationsBase = 7;
+      recs.foundations.reasons.push('Workspace not yet set up');
+    } else if (d.workspace_state === 'Basic'){
+      recs.foundations.active = true;
+      foundationsBase = 5;
+      recs.foundations.reasons.push('Workspace needs rework');
+    }
+    recs.foundations.hours += foundationsBase;
+
+    if (d.inbox_count === '3-5' && recs.foundations.active){
+      recs.foundations.hours += 1;
+    }
+    if (d.inbox_count === '6+'){
+      recs.foundations.active = true;
+      if (foundationsBase === 0) recs.foundations.hours += 5;
+      recs.foundations.hours += 3;
+      recs.foundations.reasons.push('6+ inboxes');
+    }
+
+    // Workflows: small vs large suite
+    if (d.workflows_needed === 'Basic'){
+      recs.foundations.active = true;
+      if (recs.foundations.hours === 0) recs.foundations.hours += 3;
+      recs.foundations.hours += 5;
+      recs.foundations.reasons.push('Workflow build (1-3 workflows)');
+    }
+    if (d.workflows_needed === 'Complex'){
+      recs.foundations.active = true;
+      if (recs.foundations.hours === 0) recs.foundations.hours += 3;
+      recs.foundations.hours += 9;
+      recs.foundations.reasons.push('Workflow suite (4+ workflows)');
+    }
+
+    // Multi-brand uplift: calibrated from Huuuge (4 brands needed 20 Foundations total + procedures)
+    // Multi-brand compounds: extra brand setup hrs + brand-based routing + per-brand Fin config
+    if (d.multi_brand === 'Yes' && recs.foundations.active){
+      recs.foundations.hours += 10;
+      recs.foundations.reasons.push('Multi-brand routing + setup');
+    }
+
+    // ---- Automation Engine ----
+    // Base review/plan: 3 hrs when any workflow or procedure work is in scope.
+    // Procedures: 3 hrs each standard, 4 hrs complex. Reusable components: 2-3 hrs each.
+    // Connectors: schema review 4 hrs once + ~2 hrs per connector.
+    if (d.integrations_needed === '1-2'){
+      recs.automation.active = true;
+      if (recs.automation.hours === 0) recs.automation.hours += 3;
+      recs.automation.hours += 4 + 4; // schema review + 2 connectors
+      recs.automation.reasons.push('1-2 data connectors');
+    }
+    if (d.integrations_needed === '3+'){
+      recs.automation.active = true;
+      if (recs.automation.hours === 0) recs.automation.hours += 3;
+      recs.automation.hours += 4 + 8; // schema review + ~4 connectors avg
+      recs.automation.reasons.push('3+ data connectors');
+    }
+    if (d.procedures_needed === 'Few'){
+      recs.automation.active = true;
+      if (recs.automation.hours === 0) recs.automation.hours += 3;
+      recs.automation.hours += 6; // ~2 procedures @ 3 hrs
+      recs.automation.reasons.push('1-3 Fin procedures');
+    }
+    if (d.procedures_needed === 'Many'){
+      recs.automation.active = true;
+      if (recs.automation.hours === 0) recs.automation.hours += 3;
+      recs.automation.hours += 16; // 4 procedures @ avg 3.5 hrs + reusable components
+      recs.automation.reasons.push('4+ Fin procedures');
+    }
+
+    // ---- Fin Enablement ----
+    // WorkInitiatives baseline Fin config = 10 hrs (policy 2 + knowledge 3 + launch 2 + QA 3)
+    // Cirqul full Fin = 18 hrs (adds KB build + agent training + post-golive)
+    // Huuuge = 47 hrs but includes 169-article upload (20 hrs) + Fin agent (15) + training (12)
+    if (d.fin_maturity === 'None'){
+      recs.fin.active = true;
+      recs.fin.hours += 10;
+      recs.fin.reasons.push('Fin not yet deployed');
+    } else if (d.fin_maturity === 'Basic'){
+      recs.fin.active = true;
+      recs.fin.hours += 6;
+      recs.fin.reasons.push('Fin needs tuning');
+    }
+
+    // Article upload: ~1 hr per 10 articles (Huuuge 169 articles = ~12 hrs alone,
+    // plus Help Centre foundations 3 hrs + knowledge-to-Fin connection 5 hrs = ~20 hrs combined)
+    if (d.article_count === '50-200' && recs.fin.active){
+      recs.fin.hours += 14;
+      recs.fin.reasons.push('50-200 articles (Help Centre build)');
+    }
+    if (d.article_count === '200+'){
+      recs.fin.active = true;
+      if (recs.fin.hours === 0) recs.fin.hours += 4;
+      recs.fin.hours += 22;
+      recs.fin.reasons.push('200+ articles (Help Centre build)');
+    }
+
+    // Languages: Huuuge is English-only, WI/EP/Cirqul English-only — no real calibration data
+    // Conservative estimate: +5 hrs per additional language (content prep + validation)
+    if (d.languages === '2-3'){
+      recs.fin.active = true;
+      if (recs.fin.hours === 0) recs.fin.hours += 6;
+      recs.fin.hours += 6;
+      recs.fin.reasons.push('2-3 languages');
+    }
+    if (d.languages === '4+'){
+      recs.fin.active = true;
+      if (recs.fin.hours === 0) recs.fin.hours += 6;
+      recs.fin.hours += 15;
+      recs.fin.reasons.push('4+ languages');
+    }
+
+    // ---- Team size adjustment ----
+    // Calibration data doesn't show significant team-size scaling in any of the 4 engagements.
+    // Add modest training uplift only for 50+ teams (Huuuge had 12 training hrs for 2 teams,
+    // WorkInitiatives none, EP 2 hrs). Keep at +2 hrs for agent enablement materials.
+    if (d.team_size === '50+' && recs.fin.active){
+      recs.fin.hours += 2;
+      recs.fin.reasons.push('50+ agents: additional enablement');
+    }
+
+    // Multi-brand Fin uplift: per-brand Fin routing, VIP bypass logic, extra training sessions
+    if (d.multi_brand === 'Yes' && recs.fin.active){
+      recs.fin.hours += 6;
+      recs.fin.reasons.push('Multi-brand Fin routing + training');
+    }
+
+    const totalHours = Object.values(recs).reduce((s, r) => s + (r.active ? r.hours : 0), 0);
+    const activePillars = Object.entries(recs).filter(([_, r]) => r.active).map(([k]) => k);
+    const belowMinimum = activePillars.length > 0 && totalHours < 30;
+
+    return { recs, totalHours, activePillars, belowMinimum };
+  }
+
+  const PILLAR_LABELS = {
+    blueprint: 'Transformation Blueprint',
+    foundations: 'Intercom Foundations',
+    automation: 'Automation Engine',
+    fin: 'Fin Enablement',
+  };
+
+  function formatUSD(n){
+    return '$' + Math.round(n).toLocaleString('en-US');
+  }
+
+  // ---------- Form state ----------
+  const form = document.getElementById('qualifierForm');
+  const verdictEl = document.getElementById('verdict');
+  const headlineEl = document.getElementById('verdictHeadline');
+  const reasonsEl = document.getElementById('verdictReasons');
+  const pillarTagsEl = document.getElementById('pillarTags');
+  const estPanel = document.getElementById('verdictEstimate');
+  const estHoursEl = document.getElementById('estHours');
+  const estCostEl = document.getElementById('estCost');
+  const submitBtn = document.getElementById('submitBtn');
+  const submitStatus = document.getElementById('submitStatus');
+
+  function getFormData(){
+    const fd = new FormData(form);
+    const obj = {};
+    for (const [k,v] of fd.entries()) obj[k] = v;
+    return obj;
+  }
+
+  function requiredRadios(){
+    return ['team_size','current_state','multi_brand','has_ai_strategy','kpis_defined','workspace_state','inbox_count','workflows_needed','integrations_needed','procedures_needed','fin_maturity','article_count','languages','migration_in_scope'];
+  }
+
+  function isFormComplete(data){
+    if (!data.company || !data.ae_name) return false;
+    for (const f of requiredRadios()){
+      if (!data[f]) return false;
+    }
+    return true;
+  }
+
+  function updateVerdict(){
+    const data = getFormData();
+    const complete = isFormComplete(data);
+    const { recs, totalHours, activePillars, belowMinimum } = recommendPillars(data);
+
+    const answered = requiredRadios().filter(f => data[f]).length;
+    const total = requiredRadios().length;
+
+    // Update pillar tags
+    if (activePillars.length === 0){
+      pillarTagsEl.innerHTML = answered === 0
+        ? '<span class="pillar-tag pending">Awaiting input</span>'
+        : '<span class="pillar-tag pending">No pillars flagged yet</span>';
+    } else {
+      pillarTagsEl.innerHTML = activePillars.map(k => `<span class="pillar-tag">${PILLAR_LABELS[k]}</span>`).join('');
+    }
+
+    // Update headline
+    if (answered === 0){
+      headlineEl.textContent = 'Fill the form to see the recommended pillars';
+      reasonsEl.textContent = 'Recommendations update as you answer each question.';
+      verdictEl.classList.remove('active');
+    } else if (activePillars.length === 0){
+      headlineEl.textContent = complete
+        ? 'No Sabel pillars indicated by current answers'
+        : `In progress (${answered}/${total} answered)`;
+      reasonsEl.textContent = complete
+        ? 'Answers suggest the customer may not need a structured Sabel engagement. Consider booking a discovery call to confirm.'
+        : 'Keep going — recommendations appear as signals are detected.';
+      verdictEl.classList.remove('active');
+    } else {
+      verdictEl.classList.add('active');
+      const pillarLabelText = activePillars.length === 1
+        ? PILLAR_LABELS[activePillars[0]]
+        : `${activePillars.length} pillars recommended`;
+      headlineEl.textContent = complete
+        ? `Recommendation: ${pillarLabelText}`
+        : `Tracking: ${pillarLabelText} (${answered}/${total} answered)`;
+      // Build reasons list from active pillars
+      const reasonParts = activePillars.map(k => {
+        const r = recs[k];
+        return r.reasons.length ? `${PILLAR_LABELS[k]} — ${r.reasons.join(', ')}` : PILLAR_LABELS[k];
+      });
+      reasonsEl.innerHTML = reasonParts.join(' &nbsp;·&nbsp; ') + (belowMinimum ? ' &nbsp;·&nbsp; <span style="color:var(--amber)">Below 30hr engagement minimum — bundle or upsell</span>' : '');
+    }
+
+    // Update estimate panel - show whenever pillars are active
+    if (activePillars.length > 0){
+      const hours = totalHours;
+      const cost = hours * HOURLY_RATE;
+      estPanel.style.display = 'flex';
+      estHoursEl.innerHTML = `${hours}<span class="unit">hrs</span>`;
+      estCostEl.textContent = `${formatUSD(cost)} USD`;
+    } else {
+      estPanel.style.display = 'none';
+    }
+
+    // Migration callout
+    document.getElementById('migrationCallout').classList.toggle('visible', data.migration_in_scope === 'Yes');
+
+    submitBtn.disabled = !complete;
+  }
+
+  // ---------- Event handlers ----------
+  form.addEventListener('change', updateVerdict);
+  form.addEventListener('input', updateVerdict);
+
+  // ---------- Submit ----------
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = getFormData();
+    if (!isFormComplete(data)) {
+      submitStatus.textContent = 'Please complete all required fields.';
+      submitStatus.className = 'submit-status error';
+      return;
+    }
+
+    const { recs, totalHours, activePillars, belowMinimum } = recommendPillars(data);
+    const estimate = {
+      hours: totalHours,
+      cost: totalHours * HOURLY_RATE,
+      activePillars: activePillars.map(k => ({
+        key: k,
+        label: PILLAR_LABELS[k],
+        hours: recs[k].hours,
+        cost: recs[k].hours * HOURLY_RATE,
+        reasons: recs[k].reasons,
+      })),
+      belowMinimum,
+    };
+
+    submitBtn.disabled = true;
+    submitStatus.textContent = 'Submitting...';
+    submitStatus.className = 'submit-status';
+
+    try {
+      const res = await fetch(API_ENDPOINT, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ ...data, estimate, submitted_at: new Date().toISOString() })
+      });
+
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const result = await res.json();
+
+      form.style.display = 'none';
+      document.getElementById('verdict').style.display = 'none';
+      document.querySelector('.intro').style.display = 'none';
+      const successEl = document.getElementById('successScreen');
+      successEl.classList.add('visible');
+      document.getElementById('successVerdict').innerHTML = activePillars.length > 0
+        ? `Recommended: <strong style="color:var(--red)">${activePillars.map(k => PILLAR_LABELS[k]).join(' · ')}</strong><br>Estimate: <strong>${totalHours} hrs · ${formatUSD(totalHours * HOURLY_RATE)} USD</strong>*`
+        : 'No pillars flagged — consider a discovery call to confirm fit.';
+      document.getElementById('successRef').textContent = `Reference: ${result.id || 'saved'}`;
+      window.scrollTo({top:0, behavior:'smooth'});
+    } catch (err) {
+      submitStatus.textContent = 'Submission failed. Please try again or email info@sabelcustomersuccess.com.';
+      submitStatus.className = 'submit-status error';
+      submitBtn.disabled = false;
+      console.error(err);
+    }
+  });
+
+  updateVerdict();
+</script>
+</body>
+</html>
